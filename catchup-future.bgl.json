@@ -1,0 +1,667 @@
+{
+  "title": "CatchUp local copy",
+  "description": "A blank board. Use it as a starting point for your creations.",
+  "version": "0.0.1",
+  "nodes": [
+    {
+      "type": "input",
+      "id": "input",
+      "configuration": {
+        "schema": {
+          "properties": {
+            "context": {
+              "type": "array",
+              "title": "Syllabus",
+              "examples": [],
+              "items": {
+                "type": "object",
+                "behavior": [
+                  "llm-content"
+                ]
+              },
+              "default": "[{\"role\":\"user\",\"parts\":[{\"text\":\"\"}]}]"
+            },
+            "property-2": {
+              "type": "object",
+              "behavior": [
+                "llm-content"
+              ],
+              "title": "Assignment",
+              "examples": [],
+              "default": "null"
+            }
+          },
+          "type": "object",
+          "required": []
+        }
+      },
+      "metadata": {
+        "visual": {
+          "x": -773,
+          "y": -461.00000000000034,
+          "collapsed": "advanced"
+        },
+        "title": "Student Input",
+        "logLevel": "debug"
+      }
+    },
+    {
+      "id": "specialist-6d3d01f7",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": 440.00000000000045,
+          "y": -31.999999999999872,
+          "collapsed": "expanded"
+        },
+        "title": "Student PreReq Evaluator",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": ""
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Ask student a single question (MCQ, fill in the blank) related to the study guide. Your intention is to evaluate the students for the material."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "human-ff74b25e",
+      "type": "human",
+      "metadata": {
+        "visual": {
+          "x": 804.0000000000003,
+          "y": -17.0000000000001,
+          "collapsed": "expanded"
+        },
+        "title": "Human",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "description": "A request or response",
+        "title": "User"
+      }
+    },
+    {
+      "id": "specialist-61e9b202",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": -544.9999999999997,
+          "y": -459.00000000000017,
+          "collapsed": "advanced"
+        },
+        "title": "Student Prereq Evaluator",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Scan the given syllabus and summarize the course content into lessons. Then ask the user to select the range of the material that they need to cover."
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Output the list of topics without any detail."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "human-1398b27f",
+      "type": "human",
+      "metadata": {
+        "visual": {
+          "x": -200.99999999999977,
+          "y": -459.00000000000017,
+          "collapsed": "expanded"
+        },
+        "title": "Human",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "description": "A request or response",
+        "title": "User"
+      }
+    },
+    {
+      "id": "specialist-15219d53",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": 145.99999999999977,
+          "y": -462.00000000000006,
+          "collapsed": "expanded"
+        },
+        "title": "Source Researcher",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "You will be generating a study guide with different sources from the web including the following:\nThe context you are given is the course material that you have to cover.\nYour study guide should be a sufficient material in order to solve student's assignment: {{assignment}}\nIf any feedback is given, make the fix of the previous version using them."
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "You do not have to solve the actual assignment. Do not provide anything except the compiled sources. Compile the sources in and display them in a clear and understandable way. Do not actually link the sources but rather focus on the information."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "specialist-17468045",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": 861.0000000000003,
+          "y": -459.00000000000017,
+          "collapsed": "advanced"
+        },
+        "title": "AI Answer Checker",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": ""
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "If given an answer, output true or false depending whether it is a correct answer to the {{assignment}}. Then, output the feedback that you got as an input."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "specialist-974c2e2f",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": 506.0000000000002,
+          "y": -492.00000000000006,
+          "collapsed": "advanced"
+        },
+        "title": "AI Student Model",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Just using the given context and basic college student knowledge, try solving the given {{assignment}}. Do not make any assumptions about what the student will know."
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Output the answer to the assignments after \"Answer: \" without any other explanation. Then, after \"Feedback: \", find all topics of the given context that was more than enough or find all topics that weren't or less mentioned but still needed. If it was just the write amount, leave the feedback empty."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "specialist-86033629",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": -271.99999999999983,
+          "y": -60.999999999999986,
+          "collapsed": "expanded"
+        },
+        "title": "Source Improver",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Given the feedback and the previous source file in {{source}}, address all the issues that are in the feedback and refine the source. Focus on removing the topics that aren't mentioned and adding essential parts that are needed for the assignment."
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Output the refined source. Do not output any irrelevant detail to the course."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "output-41f6ada1",
+      "type": "output",
+      "metadata": {
+        "visual": {
+          "x": 100.00000000000003,
+          "y": 210.99999999999994,
+          "collapsed": "collapsed"
+        },
+        "title": "Output"
+      },
+      "configuration": {
+        "schema": {
+          "properties": {
+            "context": {
+              "type": "array",
+              "title": "Context",
+              "items": {
+                "type": "object",
+                "examples": [],
+                "behavior": [
+                  "llm-content"
+                ],
+                "default": "null"
+              }
+            }
+          },
+          "type": "object",
+          "required": []
+        }
+      }
+    },
+    {
+      "id": "looper-f60cbce1",
+      "type": "looper",
+      "metadata": {
+        "visual": {
+          "x": 82,
+          "y": -33.000000000000114,
+          "collapsed": "expanded"
+        },
+        "title": "Looper",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "task": {
+          "parts": [
+            {
+              "text": "Based on the given study guide, evaluate the user with three total multiple choice or fill in the blank question. Present the questions one by one. Give feedback when the user gives the answer."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "output",
+      "id": "output-74c99676",
+      "configuration": {
+        "schema": {
+          "properties": {
+            "context": {
+              "type": "array",
+              "title": "Context",
+              "examples": [],
+              "items": {
+                "type": "object",
+                "behavior": [
+                  "llm-content"
+                ]
+              },
+              "default": "null"
+            }
+          },
+          "type": "object",
+          "required": []
+        }
+      },
+      "metadata": {
+        "visual": {
+          "x": 1262.0000000000005,
+          "y": 936.0000000000002,
+          "collapsed": "collapsed"
+        }
+      }
+    },
+    {
+      "id": "secrets-3bf14c0d",
+      "type": "secrets",
+      "metadata": {
+        "visual": {
+          "x": 17,
+          "y": 946.0000000000002,
+          "collapsed": "expanded"
+        },
+        "title": "Get qdrant_api_key",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "keys": [
+          "QDRANT_API_KEY"
+        ]
+      }
+    },
+    {
+      "id": "runJavascript-a96594a1",
+      "type": "runJavascript",
+      "metadata": {
+        "visual": {
+          "x": 411.00000000000034,
+          "y": 843,
+          "collapsed": "advanced"
+        },
+        "title": "Make Headers",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "name": "run",
+        "code": "function run({key}) {\n  return {\n    \"api-key\": key,\n    \"Content-Type\": \"application/json\"\n  }\n}"
+      }
+    },
+    {
+      "id": "fetch-847f1b31",
+      "type": "fetch",
+      "metadata": {
+        "visual": {
+          "x": 834.0000000000003,
+          "y": 892.0000000000001,
+          "collapsed": "advanced"
+        },
+        "title": "Search Qdrant Store",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "method": "POST",
+        "url": "https://e949d39a-dc7a-455c-991f-7359390ec855.europe-west3-0.gcp.cloud.qdrant.io:6333/collections/test_collection/points"
+      }
+    },
+    {
+      "id": "runJavascript-7eb5080a",
+      "type": "runJavascript",
+      "metadata": {
+        "visual": {
+          "x": 415.0000000000002,
+          "y": 290.99999999999983,
+          "collapsed": "expanded"
+        },
+        "title": "Make Body",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "name": "run",
+        "code": "function run({context}) {\n  const content = context[context.length-1];\n  return {\n    content\n  }\n}"
+      }
+    },
+    {
+      "id": "GEMINI_KEY-secret",
+      "type": "secrets",
+      "configuration": {
+        "keys": [
+          "GEMINI_KEY"
+        ]
+      },
+      "metadata": {
+        "visual": {
+          "x": -36.99999999999978,
+          "y": 770,
+          "collapsed": "expanded"
+        },
+        "title": "Get GEMINI_KEY",
+        "logLevel": "debug"
+      }
+    },
+    {
+      "id": "make-url",
+      "type": "urlTemplate",
+      "configuration": {
+        "template": "https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key={GEMINI_KEY}"
+      },
+      "metadata": {
+        "title": "Make URL",
+        "description": "Creating the Gemini API URL",
+        "visual": {
+          "x": 395.9999999999998,
+          "y": 610.9999999999998,
+          "collapsed": "expanded"
+        }
+      }
+    },
+    {
+      "id": "fetch-6686e587",
+      "type": "fetch",
+      "metadata": {
+        "visual": {
+          "x": 797.9999999999999,
+          "y": 304.99999999999994,
+          "collapsed": "expanded"
+        },
+        "title": "Create Embedding",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "method": "POST"
+      }
+    },
+    {
+      "id": "runJavascript-c264a6b6",
+      "type": "runJavascript",
+      "metadata": {
+        "visual": {
+          "x": 824.0000000000003,
+          "y": 573.9999999999998,
+          "collapsed": "expanded"
+        },
+        "title": "Make Body",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "name": "run",
+        "code": "function run({response}) {\n  return {\n    vector: response.embedding.values,\n    limit: 4,\n    with_payload: true,\n    with_vector: false,\n  }\n}"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "specialist-6d3d01f7",
+      "to": "human-ff74b25e",
+      "out": "out",
+      "in": "context"
+    },
+    {
+      "from": "input",
+      "to": "specialist-61e9b202",
+      "out": "context",
+      "in": "in"
+    },
+    {
+      "from": "specialist-61e9b202",
+      "to": "human-1398b27f",
+      "out": "out",
+      "in": "context"
+    },
+    {
+      "from": "input",
+      "to": "specialist-15219d53",
+      "out": "property-2",
+      "in": "p-assignment"
+    },
+    {
+      "from": "input",
+      "to": "specialist-17468045",
+      "out": "property-2",
+      "in": "p-assignment"
+    },
+    {
+      "from": "specialist-15219d53",
+      "to": "specialist-974c2e2f",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "input",
+      "to": "specialist-974c2e2f",
+      "out": "property-2",
+      "in": "p-assignment"
+    },
+    {
+      "from": "specialist-974c2e2f",
+      "to": "specialist-17468045",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "specialist-61e9b202",
+      "to": "specialist-15219d53",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "specialist-15219d53",
+      "to": "specialist-15219d53",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "specialist-15219d53",
+      "to": "specialist-86033629",
+      "out": "out",
+      "in": "p-source"
+    },
+    {
+      "from": "specialist-17468045",
+      "to": "specialist-86033629",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "specialist-86033629",
+      "to": "output-41f6ada1",
+      "out": "out",
+      "in": "context"
+    },
+    {
+      "from": "human-1398b27f",
+      "to": "specialist-15219d53",
+      "out": "context",
+      "in": "in"
+    },
+    {
+      "from": "specialist-86033629",
+      "to": "looper-f60cbce1",
+      "out": "out",
+      "in": "context"
+    },
+    {
+      "from": "human-ff74b25e",
+      "to": "looper-f60cbce1",
+      "out": "context",
+      "in": "context"
+    },
+    {
+      "from": "looper-f60cbce1",
+      "to": "specialist-6d3d01f7",
+      "out": "loop",
+      "in": "in"
+    },
+    {
+      "from": "runJavascript-a96594a1",
+      "to": "fetch-847f1b31",
+      "in": "headers",
+      "out": "result"
+    },
+    {
+      "from": "GEMINI_KEY-secret",
+      "to": "make-url",
+      "in": "GEMINI_KEY",
+      "out": "GEMINI_KEY"
+    },
+    {
+      "from": "make-url",
+      "to": "fetch-6686e587",
+      "in": "url",
+      "out": "url"
+    },
+    {
+      "from": "runJavascript-7eb5080a",
+      "to": "fetch-6686e587",
+      "in": "body",
+      "out": "result"
+    },
+    {
+      "from": "fetch-6686e587",
+      "to": "runJavascript-c264a6b6",
+      "in": "response",
+      "out": "response"
+    },
+    {
+      "from": "runJavascript-c264a6b6",
+      "to": "fetch-847f1b31",
+      "in": "body",
+      "out": "result"
+    },
+    {
+      "from": "secrets-3bf14c0d",
+      "to": "runJavascript-a96594a1",
+      "in": "key",
+      "out": "QDRANT_API_KEY"
+    },
+    {
+      "from": "fetch-847f1b31",
+      "to": "output-74c99676",
+      "in": "context",
+      "out": "response"
+    },
+    {
+      "from": "looper-f60cbce1",
+      "to": "runJavascript-7eb5080a",
+      "out": "done",
+      "in": "code"
+    },
+    {
+      "from": "specialist-86033629",
+      "to": "runJavascript-7eb5080a",
+      "out": "out",
+      "in": "context"
+    }
+  ],
+  "metadata": {
+    "comments": [],
+    "tags": [
+      "published"
+    ]
+  }
+}
