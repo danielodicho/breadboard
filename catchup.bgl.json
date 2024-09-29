@@ -1,0 +1,478 @@
+{
+  "title": "CatchUp local",
+  "description": "A blank board. Use it as a starting point for your creations.",
+  "version": "0.0.1",
+  "nodes": [
+    {
+      "type": "input",
+      "id": "input",
+      "configuration": {
+        "schema": {
+          "properties": {
+            "context": {
+              "type": "array",
+              "title": "Syllabus",
+              "examples": [],
+              "items": {
+                "type": "object",
+                "behavior": [
+                  "llm-content"
+                ]
+              },
+              "default": "[{\"role\":\"user\",\"parts\":[{\"text\":\"\"}]}]"
+            },
+            "property-2": {
+              "type": "object",
+              "behavior": [
+                "llm-content"
+              ],
+              "title": "Assignment",
+              "examples": [],
+              "default": "null"
+            }
+          },
+          "type": "object",
+          "required": []
+        }
+      },
+      "metadata": {
+        "visual": {
+          "x": -773.0000000000001,
+          "y": -461.00000000000034,
+          "collapsed": "advanced"
+        },
+        "title": "Student Input",
+        "logLevel": "debug"
+      }
+    },
+    {
+      "id": "specialist-6d3d01f7",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": 470.9999999999999,
+          "y": -8,
+          "collapsed": "expanded"
+        },
+        "title": "Student PreReq Evaluator",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": ""
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Ask student a single question (MCQ, fill in the blank) related to the study guide. Your intention is to evaluate the students for the material."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "human-ff74b25e",
+      "type": "human",
+      "metadata": {
+        "visual": {
+          "x": 841,
+          "y": -8,
+          "collapsed": "expanded"
+        },
+        "title": "Human",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "description": "A request or response",
+        "title": "User"
+      }
+    },
+    {
+      "id": "specialist-61e9b202",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": -545,
+          "y": -459.00000000000006,
+          "collapsed": "advanced"
+        },
+        "title": "Student Prereq Evaluator",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Scan the given syllabus and summarize the course content into lessons. Then ask the user to select the range of the material that they need to cover."
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Output the list of topics without any detail."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "human-1398b27f",
+      "type": "human",
+      "metadata": {
+        "visual": {
+          "x": -201,
+          "y": -459.00000000000006,
+          "collapsed": "expanded"
+        },
+        "title": "Human",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "description": "A request or response",
+        "title": "User"
+      }
+    },
+    {
+      "id": "specialist-15219d53",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": 146.00000000000003,
+          "y": -462,
+          "collapsed": "expanded"
+        },
+        "title": "Source Researcher",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "You will be generating a study guide with different sources from the web including the following:\nThe context you are given is the course material that you have to cover.\nYour study guide should be a sufficient material in order to solve student's assignment: {{assignment}}\nIf any feedback is given, make the fix of the previous version using them."
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "You do not have to solve the actual assignment. Do not provide anything except the compiled sources. Compile the sources in and display them in a clear and understandable way. Do not actually link the sources but rather focus on the information."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "specialist-17468045",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": 886,
+          "y": -456,
+          "collapsed": "advanced"
+        },
+        "title": "AI Answer Checker",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": ""
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "If given an answer, output true or false depending whether it is a correct answer to the {{assignment}}. Then, output the feedback that you got as an input."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "specialist-974c2e2f",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": 527.0000000000001,
+          "y": -460,
+          "collapsed": "advanced"
+        },
+        "title": "AI Student Model",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Just using the given context and basic college student knowledge, try solving the given {{assignment}}. Do not make any assumptions about what the student will know."
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Output the answer to the assignments after \"Answer: \" without any other explanation. Then, after \"Feedback: \", find all topics of the given context that was more than enough or find all topics that weren't or less mentioned but still needed. If it was just the write amount, leave the feedback empty."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "specialist-86033629",
+      "type": "specialist",
+      "metadata": {
+        "visual": {
+          "x": 1244.0000000000002,
+          "y": -453.00000000000006,
+          "collapsed": "expanded"
+        },
+        "title": "Source Improver",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "persona": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Given the feedback and the previous source file in {{source}}, address all the issues that are in the feedback and refine the source. Focus on removing the topics that aren't mentioned and adding essential parts that are needed for the assignment."
+            }
+          ]
+        },
+        "task": {
+          "role": "user",
+          "parts": [
+            {
+              "text": "Output the refined source. Do not output any irrelevant detail to the course."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "output-41f6ada1",
+      "type": "output",
+      "metadata": {
+        "visual": {
+          "x": 1467.0000000000002,
+          "y": -610,
+          "collapsed": "collapsed"
+        },
+        "title": "Output"
+      },
+      "configuration": {
+        "schema": {
+          "properties": {
+            "context": {
+              "type": "array",
+              "title": "Context",
+              "items": {
+                "type": "object",
+                "examples": [],
+                "behavior": [
+                  "llm-content"
+                ],
+                "default": "null"
+              }
+            }
+          },
+          "type": "object",
+          "required": []
+        }
+      }
+    },
+    {
+      "id": "output-03124e30",
+      "type": "output",
+      "metadata": {
+        "visual": {
+          "x": 328,
+          "y": -609,
+          "collapsed": "collapsed"
+        },
+        "title": "Output"
+      },
+      "configuration": {
+        "schema": {
+          "properties": {
+            "context": {
+              "type": "array",
+              "title": "Context",
+              "items": {
+                "type": "object",
+                "examples": [],
+                "behavior": [
+                  "llm-content"
+                ],
+                "default": "null"
+              }
+            }
+          },
+          "type": "object",
+          "required": []
+        }
+      }
+    },
+    {
+      "id": "looper-f60cbce1",
+      "type": "looper",
+      "metadata": {
+        "visual": {
+          "x": 141,
+          "y": -11.999999999999986,
+          "collapsed": "expanded"
+        },
+        "title": "Looper",
+        "logLevel": "debug"
+      },
+      "configuration": {
+        "model": "gemini-1.5-flash-latest",
+        "task": {
+          "parts": [
+            {
+              "text": "Based on the given study guide, evaluate the user with three total multiple choice or fill in the blank question. Present the questions one by one. Give feedback when the user gives the answer."
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "specialist-6d3d01f7",
+      "to": "human-ff74b25e",
+      "out": "out",
+      "in": "context"
+    },
+    {
+      "from": "input",
+      "to": "specialist-61e9b202",
+      "out": "context",
+      "in": "in"
+    },
+    {
+      "from": "specialist-61e9b202",
+      "to": "human-1398b27f",
+      "out": "out",
+      "in": "context"
+    },
+    {
+      "from": "input",
+      "to": "specialist-15219d53",
+      "out": "property-2",
+      "in": "p-assignment"
+    },
+    {
+      "from": "input",
+      "to": "specialist-17468045",
+      "out": "property-2",
+      "in": "p-assignment"
+    },
+    {
+      "from": "specialist-15219d53",
+      "to": "specialist-974c2e2f",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "input",
+      "to": "specialist-974c2e2f",
+      "out": "property-2",
+      "in": "p-assignment"
+    },
+    {
+      "from": "specialist-974c2e2f",
+      "to": "specialist-17468045",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "specialist-61e9b202",
+      "to": "specialist-15219d53",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "specialist-15219d53",
+      "to": "specialist-15219d53",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "specialist-15219d53",
+      "to": "specialist-86033629",
+      "out": "out",
+      "in": "p-source"
+    },
+    {
+      "from": "specialist-17468045",
+      "to": "specialist-86033629",
+      "out": "out",
+      "in": "in"
+    },
+    {
+      "from": "specialist-86033629",
+      "to": "output-41f6ada1",
+      "out": "out",
+      "in": "context"
+    },
+    {
+      "from": "human-1398b27f",
+      "to": "specialist-15219d53",
+      "out": "context",
+      "in": "in"
+    },
+    {
+      "from": "specialist-15219d53",
+      "to": "output-03124e30",
+      "out": "out",
+      "in": "context"
+    },
+    {
+      "from": "specialist-86033629",
+      "to": "looper-f60cbce1",
+      "out": "out",
+      "in": "context"
+    },
+    {
+      "from": "human-ff74b25e",
+      "to": "looper-f60cbce1",
+      "out": "context",
+      "in": "context"
+    },
+    {
+      "from": "looper-f60cbce1",
+      "to": "specialist-6d3d01f7",
+      "out": "loop",
+      "in": "in"
+    }
+  ],
+  "metadata": {
+    "comments": [],
+    "tags": [
+      "published"
+    ]
+  }
+}
